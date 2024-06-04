@@ -11,12 +11,14 @@ intents.presences = True
 
 load_dotenv()
 token = str(os.getenv('yapper_token'))
-print("this is my token: " + token)
 client = commands.Bot(command_prefix="!", intents=intents)
 
 @client.event
 async def on_ready():
   print("logged in as a bot {0.user}".format(client))
+
+playGame = False
+gameQuestionAsked = False
 
 @client.event
 async def on_message(message):
@@ -30,18 +32,63 @@ async def on_message(message):
     return
   
   if channel == "random":
+    global playGame
+    global gameQuestionAsked
+
     if userMessage.lower() == "hello" or userMessage.lower() == "hi":
       await message.channel.send(f'Hello there {username}')
+      await message.channel.send('Would you like to play a game of Rock, Paper, Scissors?')
+      gameQuestionAsked = True
       return
-    elif userMessage.lower() == "bye":
+    if userMessage.lower() == "bye":
       await message.channel.send(f'See you later, {username}')
-    elif userMessage.lower() == "tell me a joke": 
-      jokes = [" Can someone please shed more light on how my lamp got stolen?", 
-                     "Why is she called llene? She stands on equal legs.", 
-                     "What do you call a gazelle in a lions territory? Denzel."] 
-      await message.channel.send(random.choice(jokes)) 
-    else :
-      await message.channel.send("End of the code")
+
+    if gameQuestionAsked:
+      if userMessage.lower() == "yes":
+        playGame = True
+        await message.channel.send("Please enter rock, paper, or scissors.")
+      elif userMessage.lower() != "yes" :
+        playGame = False
+        await message.channel.send("Say 'hi' to me if you want to play later.")
+      gameQuestionAsked = False
+  
+    if playGame:
+      choices = ["rock","paper","scissors"]
+      userMessage = userMessage.lower()
+      botChoice = random.choice(choices)
+
+      if userMessage == botChoice:
+        await message.channel.send("Its a tie!")
+        playGame = False
+
+      elif userMessage == "rock":
+        if botChoice == "paper":
+          await message.channel.send("I won!")
+          playGame = False
+        else :
+          await message.channel.send("You won this time.")
+          playGame = False
+
+      elif userMessage == "paper":
+        if botChoice == "scissors":
+          await message.channel.send("I won!")
+          playGame = False
+        else :
+          await message.channel.send("You won this time.")
+          playGame = False
+      
+      elif userMessage == "scissors":
+        if botChoice == "rock4":
+          await message.channel.send("I won!")
+          playGame = False
+        else :
+          await message.channel.send("You won this time.")
+          playGame = False
+
+      if not playGame:
+        await message.channel.send("Would you like to play again?")
+        gameQuestionAsked = True
+
 
 @client.command()
 async def ping(ctx):
