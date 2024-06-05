@@ -21,8 +21,8 @@ async def on_ready():
 playGame = False
 gameQuestionAsked = False
 
-print(ec2_metadata.region)
-print(ec2_metadata.instance_id)
+print(f'This is my ec2 metadata for my region: {ec2_metadata.region}')
+print(f'This is my ec2 metadata for my instance: {ec2_metadata.instance_id}')
 
 @client.event
 async def on_message(message):
