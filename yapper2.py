@@ -88,6 +88,8 @@ async def on_message(message):
         else :
           await message.channel.send("You won this time.")
           playGame = False
+      else :
+        ()
 
       if not playGame:
         await message.channel.send("Would you like to play again?")
