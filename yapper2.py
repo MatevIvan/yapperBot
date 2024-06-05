@@ -26,7 +26,7 @@ print(f'This is my ec2 metadata for my instance: {ec2_metadata.instance_id}')
 
 @client.event
 async def on_message(message):
-  username = str(message.author)
+  username = str(message.author).split("#")[0]
   channel = str(message.channel)
   userMessage = str(message.content)
 
@@ -88,13 +88,10 @@ async def on_message(message):
         else :
           await message.channel.send("You won this time.")
           playGame = False
-      else :
-        print("here")
 
       if not playGame:
         await message.channel.send("Would you like to play again?")
         gameQuestionAsked = True
-
 
 @client.command()
 async def ping(ctx):
