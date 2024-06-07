@@ -14,7 +14,7 @@ intents.presences = True
 #load token from environmental variables on the os
 token = str(os.getenv('yapper_token'))
 #create the Discord bot
-client = commands.Bot(intents=intents)
+client = discord.Bot(intents=intents)
 
 #add an event handler for when the bot is ready
 @client.event
