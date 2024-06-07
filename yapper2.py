@@ -26,10 +26,6 @@ async def on_ready():
 playGame = False
 gameQuestionAsked = False
 
-#print the ec2 metadata for the region and for the instance id
-print(f'This is my ec2 metadata for my region: {ec2_metadata.region}')
-print(f'This is my ec2 metadata for my instance: {ec2_metadata.instance_id}')
-
 #create an event handler for incomming messages
 @client.event
 async def on_message(message):
@@ -39,8 +35,7 @@ async def on_message(message):
 
   #This format's usernames to simplify  
   try:
-    username = username.split("(")[1]
-    username = username[:-1]
+    username = username.split("_")[0]
   except Exception as e:
     pass
 
@@ -69,6 +64,10 @@ async def on_message(message):
     #handle simple salutation
     if userMessage.lower() == "bye" or userMessage.lower() == "good bye":
       await message.channel.send(f'See you later, {username}')
+    #handle request about ec2 information
+    if userMessage.lower() == "tell me about my server!":
+      await message.channel.send(f'This is my ec2 metadata for my region: {ec2_metadata.region}')
+      await message.channel.send(f'This is my ec2 metadata for my instance: {ec2_metadata.instance_id}')
 
     #checks to see if game question has been asked
     if gameQuestionAsked:
